@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>About – Sunny Developer</title>
+  <style>
+    :root{--acc1:#6c63ff;--acc2:#00f5d4;--acc3:#ff6b6b;--glass:rgba(255,255,255,0.04);--gb:rgba(108,99,255,0.25);--tm:#8888aa;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Space Grotesk',sans-serif;background:#050914;color:#f0f0ff;overflow-x:hidden;}
+
+    .grid-bg{position:fixed;inset:0;z-index:-3;background-image:linear-gradient(rgba(108,99,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(108,99,255,.06) 1px,transparent 1px);background-size:60px 60px;animation:gridPan 30s linear infinite;}
+    @keyframes gridPan{from{background-position:0 0}to{background-position:60px 60px}}
+
+    .bg-orbs{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none;}
+    .bg-orbs span{position:absolute;border-radius:50%;filter:blur(100px);opacity:.18;animation:orbFloat 12s ease-in-out infinite alternate;}
+    .bg-orbs span:nth-child(1){width:500px;height:500px;background:var(--acc1);top:-10%;left:-5%;}
+    .bg-orbs span:nth-child(2){width:400px;height:400px;background:var(--acc2);bottom:-5%;right:-5%;animation-delay:-4s;}
+    .bg-orbs span:nth-child(3){width:300px;height:300px;background:var(--acc3);top:50%;left:40%;animation-delay:-8s;}
+    @keyframes orbFloat{from{transform:translate(0,0) scale(1)}to{transform:translate(40px,40px) scale(1.15)}}
+
+    .cursor-glow{position:fixed;width:400px;height:400px;background:radial-gradient(circle,rgba(108,99,255,.12),transparent 70%);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:left .08s,top .08s;}
+
+    /* NAVBAR */
+    .navbar{position:sticky;top:0;z-index:1000;height:72px;background:rgba(5,9,20,0.8)!important;backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid var(--gb);}
+    .navbar-brand{font-family:'Orbitron',monospace;font-weight:900;font-size:1.1rem;letter-spacing:2px;background:linear-gradient(90deg,var(--acc1),var(--acc2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none;}
+    .nav-link{color:var(--tm)!important;font-weight:500;font-size:.9rem;padding:.5rem 1rem!important;position:relative;transition:color .3s;text-decoration:none;}
+    .nav-link::after{content:'';position:absolute;bottom:0;left:1rem;right:1rem;height:2px;background:linear-gradient(90deg,var(--acc1),var(--acc2));transform:scaleX(0);border-radius:2px;transition:transform .3s;}
+    .nav-link:hover,.nav-link.active{color:#f0f0ff!important;}
+    .nav-link:hover::after,.nav-link.active::after{transform:scaleX(1);}
+
+    /* PAGE HERO */
+    .page-hero{padding:7rem 0 4rem;text-align:center;}
+    .page-hero-tag{font-size:.8rem;letter-spacing:4px;text-transform:uppercase;color:var(--acc2);margin-bottom:1rem;}
+    .page-hero h1{font-family:'Orbitron',monospace;font-size:clamp(2.2rem,6vw,4.5rem);font-weight:900;background:linear-gradient(135deg,#fff 30%,var(--acc1));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .page-hero p{color:var(--tm);font-size:1.05rem;margin-top:1rem;max-width:500px;margin-inline:auto;}
+
+    section{padding:6rem 0;}
+
+    /* GLASS CARD */
+    .g-card{background:var(--glass);border:1px solid var(--gb);border-radius:20px;backdrop-filter:blur(12px);overflow:hidden;transition:transform .4s cubic-bezier(.34,1.56,.64,1),box-shadow .4s;position:relative;height:100%;}
+    .g-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(108,99,255,.08),transparent 60%);opacity:0;transition:opacity .4s;z-index:0;}
+    .g-card:hover{transform:translateY(-10px) scale(1.01);box-shadow:0 30px 60px rgba(0,0,0,.5),0 0 40px rgba(108,99,255,.15);}
+    .g-card:hover::before{opacity:1;}
+    .g-card>*{position:relative;z-index:1;}
+    .g-card img{width:100%;height:220px;object-fit:cover;filter:brightness(.8) saturate(1.2);}
+    .g-card .card-body{padding:1.5rem;}
+    .g-card .card-body h5{font-family:'Orbitron',monospace;font-size:.9rem;color:var(--acc2);margin-bottom:.5rem;}
+    .g-card .card-body p{color:var(--tm);font-size:.9rem;line-height:1.6;}
+
+    /* SECTION TITLE */
+    .section-title{font-family:'Orbitron',monospace;font-size:clamp(1.6rem,4vw,2.4rem);font-weight:700;text-align:center;margin-bottom:3rem;position:relative;display:inline-block;left:50%;transform:translateX(-50%);}
+    .section-title span{background:linear-gradient(90deg,var(--acc1),var(--acc2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .section-title::after{content:'';display:block;width:60%;height:3px;background:linear-gradient(90deg,var(--acc1),var(--acc2));border-radius:2px;margin:.6rem auto 0;}
+
+    /* DIVIDER */
+    .about-divider{height:1px;background:linear-gradient(90deg,transparent,var(--acc1),var(--acc2),transparent);margin:4rem 0;}
+
+    /* YOUTUBE CARD */
+    .yt-card{background:var(--glass);border:1px solid var(--gb);border-radius:24px;overflow:hidden;backdrop-filter:blur(16px);transition:transform .4s cubic-bezier(.34,1.56,.64,1),box-shadow .4s;}
+    .yt-card:hover{transform:translateY(-8px);box-shadow:0 30px 60px rgba(0,0,0,.5),0 0 40px rgba(255,107,107,.15);}
+    .yt-card img{width:100%;height:260px;object-fit:cover;filter:brightness(.75) saturate(1.2);}
+    .yt-card-body{padding:2rem;text-align:center;}
+    .yt-card-body h4{font-family:'Orbitron',monospace;font-size:1.05rem;margin-bottom:.8rem;color:#f0f0ff;}
+    .yt-card-body p{color:var(--tm);font-size:.9rem;line-height:1.7;margin-bottom:1.5rem;}
+    .btn-yt{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 2rem;background:#ff0000;color:#fff;border-radius:50px;font-weight:600;font-size:.9rem;text-decoration:none;transition:all .3s;box-shadow:0 0 30px rgba(255,0,0,.3);}
+    .btn-yt:hover{box-shadow:0 0 50px rgba(255,0,0,.5);transform:translateY(-2px);color:#fff;}
+
+    /* REVEAL */
+    .reveal{opacity:0;transform:translateY(40px);transition:opacity .8s ease,transform .8s ease;}
+    .reveal.visible{opacity:1;transform:translateY(0);}
+
+    /* FOOTER */
+    .footer-strip{border-top:1px solid var(--gb);padding:1.5rem;text-align:center;color:var(--tm);font-size:.82rem;}
+  </style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="bg-orbs"><span></span><span></span><span></span></div>
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container">
+    <a class="navbar-brand" href="/">SUNNY<span style="color:var(--acc2)">.</span>DEV</a>
+    <button class="navbar-toggler border-0" data-bs-toggle="collapse" data-bs-target="#nav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav ms-auto gap-1">
+        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link active" href="/about">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="/projects">Projects</a></li>
+        <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero reveal">
+  <p class="page-hero-tag">Get to know me</p>
+  <h1>About Me</h1>
+  <p>Designer. Developer. Entertainer. A curious builder exploring the intersection of AI and creativity.</p>
+</div>
+
+<!-- ABOUT CARDS -->
+<section>
+  <div class="container">
+    <h2 class="section-title"><span>What I Do</span></h2>
+    <div class="row g-4">
+      <div class="col-md-4 reveal">
+        <div class="g-card">
+          <img src="https://images.unsplash.com/photo-1559028012-481c04fa702d?w=600&h=400&fit=crop">
+          <div class="card-body">
+            <h5>Designer</h5>
+            <p>I design clean and modern user interfaces for web applications.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 reveal" style="transition-delay:.15s">
+        <div class="g-card">
+          <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=400&fit=crop">
+          <div class="card-body">
+            <h5>Developer</h5>
+            <p>I build full stack web applications using Python, Django and JavaScript.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 reveal" style="transition-delay:.3s">
+        <div class="g-card">
+          <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&h=400&fit=crop">
+          <div class="card-body">
+            <h5>Entertainer</h5>
+            <p>I enjoy creating engaging tech content and making technology fun to learn.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-divider"></div>
+
+    <!-- YOUTUBE -->
+    <div class="row justify-content-center reveal">
+      <div class="col-md-6">
+        <div class="yt-card">
+          <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=600&h=400&fit=crop">
+          <div class="yt-card-body">
+            <h4>Coding YouTuber</h4>
+            <p>I run a YouTube channel where I teach programming, web development, and machine learning to help beginners learn coding easily.</p>
+            <a href="https://www.youtube.com/watch?v=1VwZ1tnDZbs&list=RDMMN5BmQz4AmFI&index=10" class="btn-yt" target="_blank">▶ Visit My Channel</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="footer-strip">© 2025 Sunny Developer — Built with passion & caffeine ☕</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const glow = document.getElementById('cursorGlow');
+  document.addEventListener('mousemove', e => { glow.style.left=e.clientX+'px'; glow.style.top=e.clientY+'px'; });
+  const obs = new IntersectionObserver(entries => { entries.forEach(el => { if(el.isIntersecting) el.target.classList.add('visible'); }); }, {threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

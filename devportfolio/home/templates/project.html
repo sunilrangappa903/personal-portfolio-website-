@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>Projects – Sunny Developer</title>
+  <style>
+    :root{--acc1:#6c63ff;--acc2:#00f5d4;--acc3:#ff6b6b;--glass:rgba(255,255,255,0.04);--gb:rgba(108,99,255,0.25);--tm:#8888aa;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Space Grotesk',sans-serif;background:#050914;color:#f0f0ff;overflow-x:hidden;}
+
+    .grid-bg{position:fixed;inset:0;z-index:-3;background-image:linear-gradient(rgba(108,99,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(108,99,255,.06) 1px,transparent 1px);background-size:60px 60px;animation:gridPan 30s linear infinite;}
+    @keyframes gridPan{from{background-position:0 0}to{background-position:60px 60px}}
+
+    .bg-orbs{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none;}
+    .bg-orbs span{position:absolute;border-radius:50%;filter:blur(100px);opacity:.18;animation:orbFloat 12s ease-in-out infinite alternate;}
+    .bg-orbs span:nth-child(1){width:500px;height:500px;background:var(--acc1);top:-10%;left:-5%;}
+    .bg-orbs span:nth-child(2){width:400px;height:400px;background:var(--acc2);bottom:-5%;right:-5%;animation-delay:-4s;}
+    .bg-orbs span:nth-child(3){width:300px;height:300px;background:var(--acc3);top:50%;left:40%;animation-delay:-8s;}
+    @keyframes orbFloat{from{transform:translate(0,0) scale(1)}to{transform:translate(40px,40px) scale(1.15)}}
+
+    .cursor-glow{position:fixed;width:400px;height:400px;background:radial-gradient(circle,rgba(108,99,255,.12),transparent 70%);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:left .08s,top .08s;}
+
+    /* NAVBAR */
+    .navbar{position:sticky;top:0;z-index:1000;height:72px;background:rgba(5,9,20,0.8)!important;backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid var(--gb);}
+    .navbar-brand{font-family:'Orbitron',monospace;font-weight:900;font-size:1.1rem;letter-spacing:2px;background:linear-gradient(90deg,var(--acc1),var(--acc2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none;}
+    .nav-link{color:var(--tm)!important;font-weight:500;font-size:.9rem;padding:.5rem 1rem!important;position:relative;transition:color .3s;text-decoration:none;}
+    .nav-link::after{content:'';position:absolute;bottom:0;left:1rem;right:1rem;height:2px;background:linear-gradient(90deg,var(--acc1),var(--acc2));transform:scaleX(0);border-radius:2px;transition:transform .3s;}
+    .nav-link:hover,.nav-link.active{color:#f0f0ff!important;}
+    .nav-link:hover::after,.nav-link.active::after{transform:scaleX(1);}
+
+    /* PAGE HERO */
+    .page-hero{padding:7rem 0 4rem;text-align:center;}
+    .page-hero-tag{font-size:.8rem;letter-spacing:4px;text-transform:uppercase;color:var(--acc2);margin-bottom:1rem;}
+    .page-hero h1{font-family:'Orbitron',monospace;font-size:clamp(2.2rem,6vw,4.5rem);font-weight:900;background:linear-gradient(135deg,#fff 30%,var(--acc1));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .page-hero p{color:var(--tm);font-size:1.05rem;margin-top:1rem;max-width:500px;margin-inline:auto;}
+
+    section{padding:6rem 0;}
+
+    /* FILTER TABS */
+    .filter-tabs{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center;margin-bottom:3rem;}
+    .filter-btn{padding:.5rem 1.4rem;border-radius:50px;font-size:.85rem;font-weight:500;cursor:pointer;border:1px solid var(--gb);background:var(--glass);color:var(--tm);transition:all .3s;letter-spacing:.5px;font-family:'Space Grotesk',sans-serif;}
+    .filter-btn:hover,.filter-btn.active{background:linear-gradient(135deg,var(--acc1),#9b59b6);border-color:transparent;color:#fff;box-shadow:0 0 20px rgba(108,99,255,.35);}
+
+    /* PROJECT CARD */
+    .proj-card{background:var(--glass);border:1px solid var(--gb);border-radius:20px;overflow:hidden;backdrop-filter:blur(12px);transition:transform .4s cubic-bezier(.34,1.56,.64,1),box-shadow .4s;position:relative;height:100%;}
+    .proj-card:hover{transform:translateY(-12px) scale(1.01);box-shadow:0 30px 60px rgba(0,0,0,.5),0 0 40px rgba(108,99,255,.15);}
+    .proj-card.featured{border-color:rgba(108,99,255,.5);}
+
+    .proj-img{position:relative;overflow:hidden;}
+    .proj-img img{width:100%;height:200px;object-fit:cover;filter:brightness(.75) saturate(1.2);transition:transform .5s ease,filter .5s;}
+    .proj-card:hover .proj-img img{transform:scale(1.08);filter:brightness(.9) saturate(1.4);}
+    .proj-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(5,9,20,.9) 0%,transparent 60%);}
+
+    .proj-badge{position:absolute;top:1rem;right:1rem;padding:.25rem .75rem;border-radius:50px;font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+    .badge-ai{background:rgba(108,99,255,.3);color:var(--acc1);border:1px solid var(--acc1);}
+    .badge-web{background:rgba(0,245,212,.2);color:var(--acc2);border:1px solid var(--acc2);}
+    .badge-ml{background:rgba(255,107,107,.2);color:var(--acc3);border:1px solid var(--acc3);}
+    .badge-full{background:rgba(255,200,80,.2);color:#ffc850;border:1px solid #ffc850;}
+
+    .proj-body{padding:1.4rem;}
+    .proj-body h5{font-family:'Orbitron',monospace;font-size:.88rem;color:#f0f0ff;margin-bottom:.5rem;}
+    .proj-body p{color:var(--tm);font-size:.85rem;line-height:1.65;margin-bottom:1rem;}
+    .proj-tags{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.2rem;}
+    .proj-tag{padding:.2rem .65rem;border-radius:4px;font-size:.72rem;background:rgba(255,255,255,.06);color:var(--tm);border:1px solid var(--gb);}
+    .proj-links{display:flex;gap:.6rem;}
+    .proj-link{flex:1;text-align:center;padding:.5rem;border-radius:10px;font-size:.8rem;font-weight:600;text-decoration:none;transition:all .3s;}
+    .proj-link-primary{background:linear-gradient(135deg,var(--acc1),#9b59b6);color:#fff;}
+    .proj-link-primary:hover{box-shadow:0 0 20px rgba(108,99,255,.5);color:#fff;transform:translateY(-1px);}
+    .proj-link-outline{border:1px solid var(--gb);color:var(--tm);}
+    .proj-link-outline:hover{border-color:var(--acc2);color:var(--acc2);}
+
+    /* REVEAL */
+    .reveal{opacity:0;transform:translateY(40px);transition:opacity .8s ease,transform .8s ease;}
+    .reveal.visible{opacity:1;transform:translateY(0);}
+
+    /* HIDDEN CARD (filter) */
+    .proj-col{transition:opacity .4s,transform .4s;}
+    .proj-col.hidden{opacity:0;transform:scale(.92);pointer-events:none;position:absolute;visibility:hidden;}
+
+    /* FOOTER */
+    .footer-strip{border-top:1px solid var(--gb);padding:1.5rem;text-align:center;color:var(--tm);font-size:.82rem;}
+  </style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="bg-orbs"><span></span><span></span><span></span></div>
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container">
+    <a class="navbar-brand" href="/">SUNNY<span style="color:var(--acc2)">.</span>DEV</a>
+    <button class="navbar-toggler border-0" data-bs-toggle="collapse" data-bs-target="#nav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav ms-auto gap-1">
+        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+        <li class="nav-item"><a class="nav-link active" href="/projects">Projects</a></li>
+        <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero reveal">
+  <p class="page-hero-tag">What I've built</p>
+  <h1>Projects</h1>
+  <p>A collection of real-world projects spanning AI, web development, and beyond.</p>
+</div>
+
+<!-- PROJECTS -->
+<section>
+  <div class="container">
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs reveal">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="ai">AI / ML</button>
+      <button class="filter-btn" data-filter="web">Web</button>
+      <button class="filter-btn" data-filter="fullstack">Full Stack</button>
+    </div>
+
+    <div class="row g-4 position-relative" id="projectGrid">
+
+      <!-- 1 -->
+      <div class="col-md-6 col-lg-4 proj-col reveal" data-category="ai">
+        <div class="proj-card featured">
+          <div class="proj-img">
+            <img src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=600&h=400&fit=crop">
+            <div class="proj-img-overlay"></div>
+            <span class="proj-badge badge-ai">AI</span>
+          </div>
+          <div class="proj-body">
+            <h5>AI Chat Assistant</h5>
+            <p>An intelligent conversational assistant powered by NLP that understands context and provides smart responses in real time.</p>
+            <div class="proj-tags">
+              <span class="proj-tag">Python</span><span class="proj-tag">NLP</span>
+              <span class="proj-tag">Django</span><span class="proj-tag">OpenAI</span>
+            </div>
+            <div class="proj-links">
+              <a href="#" class="proj-link proj-link-primary">Live Demo</a>
+              <a href="#" class="proj-link proj-link-outline">GitHub</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2 -->
+      <div class="col-md-6 col-lg-4 proj-col reveal" style="transition-delay:.1s" data-category="web">
+        <div class="proj-card">
+          <div class="proj-img">
+            <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?w=600&h=400&fit=crop">
+            <div class="proj-img-overlay"></div>
+            <span class="proj-badge badge-web">Web</span>
+          </div>
+          <div class="proj-body">
+            <h5>Portfolio Website</h5>
+            <p>A modern, animated personal portfolio with glassmorphism design, smooth transitions, and full Django backend integration.</p>
+            <div class="proj-tags">
+              <span class="proj-tag">HTML</span><span class="proj-tag">CSS</span>
+              <span class="proj-tag">JavaScript</span><span class="proj-tag">Django</span>
+            </div>
+            <div class="proj-links">
+              <a href="#" class="proj-link proj-link-primary">Live Demo</a>
+              <a href="#" class="proj-link proj-link-outline">GitHub</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 -->
+      <div class="col-md-6 col-lg-4 proj-col reveal" style="transition-delay:.2s" data-category="ai">
+        <div class="proj-card">
+          <div class="proj-img">
+            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop">
+            <div class="proj-img-overlay"></div>
+            <span class="proj-badge badge-ml">ML</span>
+          </div>
+          <div class="proj-body">
+            <h5>Price Prediction Model</h5>
+            <p>Machine learning model that predicts housing prices using regression algorithms with 92% accuracy on test data.</p>
+            <div class="proj-tags">
+              <span class="proj-tag">Python</span><span class="proj-tag">Scikit-learn</span>
+              <span class="proj-tag">Pandas</span><span class="proj-tag">NumPy</span>
+            </div>
+            <div class="proj-links">
+              <a href="#" class="proj-link proj-link-primary">Live Demo</a>
+              <a href="#" class="proj-link proj-link-outline">GitHub</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 -->
+      <div class="col-md-6 col-lg-4 proj-col reveal" style="transition-delay:.05s" data-category="fullstack">
+        <div class="proj-card">
+          <div class="proj-img">
+            <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=600&h=400&fit=crop">
+            <div class="proj-img-overlay"></div>
+            <span class="proj-badge badge-full">Full Stack</span>
+          </div>
+          <div class="proj-body">
+            <h5>E-Commerce Platform</h5>
+            <p>Complete online store with product management, cart system, Stripe payment integration, and admin dashboard.</p>
+            <div class="proj-tags">
+              <span class="proj-tag">Django</span><span class="proj-tag">Bootstrap</span>
+              <span class="proj-tag">Stripe</span><span class="proj-tag">PostgreSQL</span>
+            </div>
+            <div class="proj-links">
+              <a href="#" class="proj-link proj-link-primary">Live Demo</a>
+              <a href="#" class="proj-link proj-link-outline">GitHub</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 -->
+      <div class="col-md-6 col-lg-4 proj-col reveal" style="transition-delay:.15s" data-category="ai">
+        <div class="proj-card">
+          <div class="proj-img">
+            <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=600&h=400&fit=crop">
+            <div class="proj-img-overlay"></div>
+            <span class="proj-badge badge-ai">AI</span>
+          </div>
+          <div class="proj-body">
+            <h5>Image Classifier</h5>
+            <p>Deep learning CNN model that classifies images into 10 categories with real-time prediction through a web interface.</p>
+            <div class="proj-tags">
+              <span class="proj-tag">TensorFlow</span><span class="proj-tag">Keras</span>
+              <span class="proj-tag">Python</span><span class="proj-tag">Django</span>
+            </div>
+            <div class="proj-links">
+              <a href="#" class="proj-link proj-link-primary">Live Demo</a>
+              <a href="#" class="proj-link proj-link-outline">GitHub</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 -->
+      <div class="col-md-6 col-lg-4 proj-col reveal" style="transition-delay:.25s" data-category="web">
+        <div class="proj-card">
+          <div class="proj-img">
+            <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=600&h=400&fit=crop">
+            <div class="proj-img-overlay"></div>
+            <span class="proj-badge badge-web">Web</span>
+          </div>
+          <div class="proj-body">
+            <h5>YouTube Clone</h5>
+            <p>A fully functional video streaming platform with upload, playback, comments, and recommendation features.</p>
+            <div class="proj-tags">
+              <span class="proj-tag">Django</span><span class="proj-tag">JavaScript</span>
+              <span class="proj-tag">FFmpeg</span><span class="proj-tag">AWS S3</span>
+            </div>
+            <div class="proj-links">
+              <a href="#" class="proj-link proj-link-primary">Live Demo</a>
+              <a href="#" class="proj-link proj-link-outline">GitHub</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="footer-strip">© 2025 Sunny Developer — Built with passion & caffeine ☕</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const glow = document.getElementById('cursorGlow');
+  document.addEventListener('mousemove', e => { glow.style.left=e.clientX+'px'; glow.style.top=e.clientY+'px'; });
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(el => { if(el.isIntersecting) el.target.classList.add('visible'); });
+  }, {threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter;
+      document.querySelectorAll('.proj-col').forEach(col => {
+        const show = f === 'all' || col.dataset.category === f;
+        col.classList.toggle('hidden', !show);
+      });
+    });
+  });
+</script>
+</body>
+</html>
